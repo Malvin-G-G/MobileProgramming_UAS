@@ -1,4 +1,4 @@
-# uas_duolingo
+# UAS Duolingo/Language learning mobile app
 
 A new Flutter project.
 
