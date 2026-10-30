@@ -2,7 +2,7 @@
 
 A new Flutter project.
 
-run: **flutter pub get** in the terminal
+run: `flutter pub get` in the terminal
 
 ## Getting Started
 
