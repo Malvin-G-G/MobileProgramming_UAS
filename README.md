@@ -1,4 +1,5 @@
-# UAS Duolingo/Language learning mobile app
+# UAS / Language learning mobile app
+App name : MultiLingo
 
 A new Flutter project.
 
