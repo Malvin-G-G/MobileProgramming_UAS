@@ -1,9 +1,10 @@
 # UAS / Language learning mobile app
+
 App name : MultiLingo
 
 A new Flutter project.
 
-run: `flutter pub get` in the terminal
+run:     "flutter pub get"     in the terminal
 
 ## Getting Started
 
