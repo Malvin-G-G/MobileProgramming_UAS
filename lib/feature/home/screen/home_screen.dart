@@ -10,7 +10,7 @@ import '../../languages/language_select/models/language.dart';
 import '../../languages/language_select/providers/language_provider.dart';
 import '../../onboarding/{screens,providers}/onboarding_provider.dart';
 import '../widgets/stats_header.dart';
-
+import '../widgets/learning_path.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -18,7 +18,7 @@ class HomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final language = languageByCode(ref.watch(selectedLanguageProvider));
-
+    // exp & hp
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -29,7 +29,7 @@ class HomeScreen extends ConsumerWidget {
               hearts: 5,
             ),
             const Divider(height: 1, color: AppColors.border),
-            const Expanded(child: _PathPlaceholder()),
+            const Expanded(child: LearningPath()),
           ],
         ),
       ),
@@ -58,8 +58,8 @@ class _LanguageMenu extends ConsumerWidget {
       },
       itemBuilder: (context) => const [
         PopupMenuItem<String>(value: 'change', child: Text('Change language')),
-        // For test stuff, REMEMBER, FOR TESTING, delete later
-        PopupMenuItem<String>(value: 'reset', child: Text('Reset data (test)')),
+        // again, delete later, not now
+        PopupMenuItem<String>(value: 'reset', child: Text('Reset data (debug)')),
       ],
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -67,21 +67,6 @@ class _LanguageMenu extends ConsumerWidget {
           Text(language?.flag ?? '🌍', style: const TextStyle(fontSize: 28)),
           const Icon(Icons.arrow_drop_down, color: AppColors.textSecondary),
         ],
-      ),
-    );
-  }
-}
-
-// delete later
-class _PathPlaceholder extends StatelessWidget {
-  const _PathPlaceholder();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Text(
-        'Your learning path will appear here.',
-        style: TextStyle(color: AppColors.textSecondary),
       ),
     );
   }

@@ -74,7 +74,7 @@ class _LanguageSelectScreenState extends ConsumerState<LanguageSelectScreen> {
                 ),
               ),
               const SizedBox(height: 16),
-              PrimaryButton(
+              PrimeButton(
                 label: 'CONTINUE',
                 onPressed: _selected == null ? null : _continue,
               ),

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../theme/app_colors.dart';
 
-class PrimaryButton extends StatefulWidget {
-  const PrimaryButton({
+class PrimeButton extends StatefulWidget {
+  const PrimeButton({
     super.key,
     required this.label,
     required this.onPressed,
@@ -19,10 +19,10 @@ class PrimaryButton extends StatefulWidget {
   final Color textColor;
 
   @override
-  State<PrimaryButton> createState() => _PrimaryButtonState();
+  State<PrimeButton> createState() => _PrimaryButtonState();
 }
 
-class _PrimaryButtonState extends State<PrimaryButton> {
+class _PrimaryButtonState extends State<PrimeButton> {
   static const double _height = 52;
   static const double _depth = 4;
 
