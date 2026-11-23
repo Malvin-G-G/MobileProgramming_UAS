@@ -106,7 +106,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
             _Dots(count: _pages.length, current: _index),
             Padding(
               padding: const EdgeInsets.fromLTRB(24, 24, 24, 24),
-              child: PrimaryButton(
+              child: PrimeButton(
                 label: _isLast ? 'GET STARTED' : 'NEXT',
                 onPressed: _next,
               ),
