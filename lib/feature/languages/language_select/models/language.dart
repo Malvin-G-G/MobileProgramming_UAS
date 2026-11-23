@@ -14,7 +14,7 @@ class Language {
   final bool available; // false = ada "coming soon"
 }
 
-/// Daftar bahasa yang ditampilkan. Untuk MVP cukup 2 bahasa yang aktif.
+/// Daftar bahasa.
 const List<Language> supportedLanguages = [
   Language(
     code: 'en',

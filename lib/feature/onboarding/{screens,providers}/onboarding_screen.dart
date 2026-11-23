@@ -90,7 +90,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
               child: TextButton(
                 onPressed: _finish,
                 child: const Text(
-                  'Lewati',
+                  'Skip',
                   style: TextStyle(color: AppColors.textSecondary),
                 ),
               ),
@@ -107,7 +107,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
             Padding(
               padding: const EdgeInsets.fromLTRB(24, 24, 24, 24),
               child: PrimaryButton(
-                label: _isLast ? 'MULAI' : 'LANJUT',
+                label: _isLast ? 'GET STARTED' : 'NEXT',
                 onPressed: _next,
               ),
             ),
