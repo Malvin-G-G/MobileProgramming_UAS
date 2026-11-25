@@ -6,6 +6,7 @@ import '../../../core/providers/shared_prefs_provider.dart';
 import '../../../core/router/app_routes.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../auth/providers/auth_provider.dart';
+import '../../progress/providers/progress_provider.dart';
 import '../../languages/language_select/models/language.dart';
 import '../../languages/language_select/providers/language_provider.dart';
 import '../../onboarding/{screens,providers}/onboarding_provider.dart';
@@ -18,15 +19,16 @@ class HomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final language = languageByCode(ref.watch(selectedLanguageProvider));
-    // exp & hp
+    final progress = ref.watch(progressProvider).value;
     return Scaffold(
       body: SafeArea(
         child: Column(
           children: [
             StatsHeader(
               leading: _LanguageMenu(language: language),
-              xp: 120,
-              hearts: 5,
+              xp: progress?.xp ?? 0,
+              hearts: progress?.hearts ?? 0,
+              level: progress?.level ?? 1,
             ),
             const Divider(height: 1, color: AppColors.border),
             const Expanded(child: LearningPath()),
