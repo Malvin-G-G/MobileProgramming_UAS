@@ -1,11 +1,13 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/theme/app_colors.dart';
+import '../../progress/providers/progress_provider.dart';
 import '../models/learning_node.dart';
+import 'node_sheet.dart';
 import 'path_node.dart';
-import '../../../core/widgets/prime.button.dart';
 
 const Color _connectorColor = Color(0xFFD5D3E0); // garis abu penghubung node
 const double _connectorWidth = 8;
@@ -13,18 +15,27 @@ const double _rowHeight = 124; // tinggi satu baris node
 const double _circleTop = 8; // jarak atas baris ke lingkaran
 const double _zigzag = 0.6; // seberapa jauh node bergeser kiri-kanan (0..1)
 
-class LearningPath extends StatelessWidget {
+class LearningPath extends ConsumerWidget {
   const LearningPath({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final completed = ref.watch(progressProvider).value?.completed ?? const {};
+    final units = buildUnits(completed);
+
     final children = <Widget>[];
     var startIndex = 0;
 
-    for (final unit in dummyUnits) {
+    for (final unit in units) {
       children.add(_UnitBanner(unit: unit));
       children.add(const SizedBox(height: 12));
-      children.add(_UnitPath(lessons: unit.lessons, startIndex: startIndex));
+      children.add(
+        _UnitPath(
+          lessons: unit.lessons,
+          startIndex: startIndex,
+          onNodeTap: (node) => showNodeSheet(context, ref, node),
+        ),
+      );
       children.add(const SizedBox(height: 24));
       startIndex += unit.lessons.length;
     }
@@ -36,13 +47,17 @@ class LearningPath extends StatelessWidget {
   }
 }
 
-/// Node-node satu unit + garis penghubungnya.
-/// Posisi dihitung manual supaya garis tepat menyambung pusat lingkaran.
-class _UnitPath extends StatelessWidget {
-  const _UnitPath({required this.lessons, required this.startIndex});
+// Node-node satu unit + garis penghubungnya.
+// Posisi dihitung manual supaya garis tepat menyambung pusat lingkaran.
+  const _UnitPath({
+    required this.lessons,
+    required this.startIndex,
+    required this.onNodeTap,
+  });
 
   final List<LessonNode> lessons;
   final int startIndex; // supaya pola zig-zag nyambung antar unit
+  final ValueChanged<LessonNode> onNodeTap;
 
   @override
   Widget build(BuildContext context) {
@@ -147,8 +162,8 @@ class _UnitBanner extends StatelessWidget {
   }
 }
 
-/// Reaksi saat node diketuk: pesan kalau terkunci,
-/// panel START / PRACTICE kalau aktif atau sudah selesai.
+// Reaksi saat node diketuk: pesan kalau terkunci,
+// panel START / PRACTICE kalau aktif atau sudah selesai.
 void _showNodeSheet(BuildContext context, LessonNode node) {
   if (node.status == NodeStatus.locked) {
     ScaffoldMessenger.of(context)

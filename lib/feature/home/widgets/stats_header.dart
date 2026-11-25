@@ -8,6 +8,20 @@ class StatsHeader extends StatelessWidget {
     required this.leading,
     required this.xp,
     required this.hearts,
+    this.level = 1,
+  });
+
+  final Widget leading;
+  final int xp;
+  final int hearts;
+  final int level;
+
+class StatsHeader extends StatelessWidget {
+  const StatsHeader({
+    super.key,
+    required this.leading,
+    required this.xp,
+    required this.hearts,
   });
 
   final Widget leading;
@@ -23,6 +37,8 @@ class StatsHeader extends StatelessWidget {
           leading,
           const Spacer(),
           _Stat(icon: Icons.bolt, color: AppColors.accentDark, value: xp),
+          _LevelChip(level: level),
+          const SizedBox(width: 16),
           const SizedBox(width: 16),
           _Stat(icon: Icons.favorite, color: AppColors.error, value: hearts),
         ],
@@ -57,3 +73,26 @@ class _Stat extends StatelessWidget {
   }
 }
 
+class _LevelChip extends StatelessWidget {
+  const _LevelChip({required this.level});
+  final int level;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      decoration: BoxDecoration(
+        color: AppColors.primary,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Text(
+        'LV $level',
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 14,
+          fontWeight: FontWeight.w900,
+        ),
+      ),
+    );
+  }
+}
