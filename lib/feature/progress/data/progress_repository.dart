@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import '../../../core/database/app_database.dart';
+import 'package:uas_duolingo/core/database/app_database.dart';
 
 const int kMaxHearts = 5;
 const Duration kHeartRegenInterval = Duration(minutes: 5);

@@ -1,12 +1,12 @@
 import 'package:go_router/go_router.dart';
 
-import '../../feature/home/screen/home_screen.dart';
-import '../../feature/languages/language_select/screens/screen.dart';
-import '../../feature/onboarding/{screens,providers}/onboarding_screen.dart';
-import '../../feature/auth/screens/login_screen.dart';
-import '../../feature/auth/screens/register_screen.dart';
-import '../../feature/splash/screens/splash_screen.dart';
-import '../../feature/lesson/screens/lesson_screen.dart';
+import 'package:uas_duolingo/feature/home/screen/home_screen.dart';
+import 'package:uas_duolingo/feature/languages/language_select/screens/screen.dart';
+import 'package:uas_duolingo/feature/onboarding/{screens,providers}/onboarding_screen.dart';
+import 'package:uas_duolingo/feature/auth/screens/login_screen.dart';
+import 'package:uas_duolingo/feature/auth/screens/register_screen.dart';
+import 'package:uas_duolingo/feature/splash/screens/splash_screen.dart';
+import 'package:uas_duolingo/feature/lesson/screens/lesson_screen.dart';
 import 'app_routes.dart';
 
 final GoRouter appRouter = GoRouter(

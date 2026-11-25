@@ -1,9 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../core/database/app_database.dart';
-import '../../auth/providers/auth_provider.dart';
-import '../../languages/language_select/providers/language_provider.dart';
-import '../data/progress_repository.dart';
+import 'package:uas_duolingo/core/database/app_database.dart';
+import 'package:uas_duolingo/feature/auth/providers/auth_provider.dart';
+import 'package:uas_duolingo/feature/languages/language_select/providers/language_provider.dart';
+import 'package:uas_duolingo/feature/progress/data/progress_repository.dart';
 
 final progressRepositoryProvider = Provider<ProgressRepository>((ref) {
   return ProgressRepository(ref.watch(appDatabaseProvider));

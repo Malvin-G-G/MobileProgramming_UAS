@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/theme/app_colors.dart';
-import '../models/language.dart';
+import 'package:uas_duolingo/core/theme/app_colors.dart';
+import 'package:uas_duolingo/feature/languages/language_select/models/language.dart';
 
 class LanguageTile extends StatelessWidget {
   const LanguageTile({

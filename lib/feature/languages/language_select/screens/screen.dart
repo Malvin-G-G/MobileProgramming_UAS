@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../core/router/app_routes.dart';
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/widgets/prime.button.dart';
-import '../models/language.dart';
+import 'package:uas_duolingo/core/router/app_routes.dart';
+import 'package:uas_duolingo/core/theme/app_colors.dart';
+import 'package:uas_duolingo/core/widgets/prime.button.dart';
+import 'package:uas_duolingo/feature/languages/language_select/models/language.dart';
 import '../providers/language_provider.dart';
-import '../widgets/tile.dart';
+import 'package:uas_duolingo/feature/languages/language_select/widgets/tile.dart';
 
 class LanguageSelectScreen extends ConsumerStatefulWidget {
   const LanguageSelectScreen({super.key});

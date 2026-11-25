@@ -3,7 +3,7 @@ import 'dart:math';
 
 import 'package:crypto/crypto.dart';
 
-import '../../../core/database/app_database.dart';
+import 'package:uas_duolingo/core/database/app_database.dart';
 
 class AppUser {
   const AppUser({

@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../languages/language_select/providers/language_provider.dart';
-import '../data/lesson_service.dart';
+import 'package:uas_duolingo/feature/languages/language_select/providers/language_provider.dart';
+import 'package:uas_duolingo/feature/lesson/data/lesson_service.dart';
 
 // Menyediakan layanan terjemahan.
 final translationServiceProvider = Provider<TranslationService>((ref) {

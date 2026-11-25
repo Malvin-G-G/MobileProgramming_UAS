@@ -3,9 +3,9 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../core/theme/app_colors.dart';
-import '../../progress/providers/progress_provider.dart';
-import '../models/learning_node.dart';
+import 'package:uas_duolingo/core/theme/app_colors.dart';
+import 'package:uas_duolingo/feature/progress/providers/progress_provider.dart';
+import 'package:uas_duolingo/feature/home/models/learning_node.dart';
 import 'node_sheet.dart';
 import 'path_node.dart';
 

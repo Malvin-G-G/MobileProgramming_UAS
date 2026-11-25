@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../core/router/app_routes.dart';
-import '../../../core/theme/app_colors.dart';
-import '../../../core/widgets/prime.button.dart';
+import 'package:uas_duolingo/core/router/app_routes.dart';
+import 'package:uas_duolingo/core/theme/app_colors.dart';
+import 'package:uas_duolingo/core/widgets/prime.button.dart';
 import '../../progress/data/progress_repository.dart';
 import '../../progress/providers/progress_provider.dart';
 import '../data/lesson_service.dart';

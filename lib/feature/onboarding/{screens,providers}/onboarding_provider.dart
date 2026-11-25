@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../core/providers/shared_prefs_provider.dart';
+import 'package:uas_duolingo/core/providers/shared_prefs_provider.dart';
 
 class OnboardingDoneNotifier extends Notifier<bool> {
   static const String _key = 'onboarding_done';

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/theme/app_colors.dart';
+import 'package:uas_duolingo/core/theme/app_colors.dart';
 
 class AuthTextField extends StatefulWidget {
   const AuthTextField({

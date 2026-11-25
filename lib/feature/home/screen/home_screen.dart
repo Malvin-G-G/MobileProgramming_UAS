@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../core/providers/shared_prefs_provider.dart';
-import '../../../core/router/app_routes.dart';
-import '../../../core/theme/app_colors.dart';
-import '../../auth/providers/auth_provider.dart';
-import '../../progress/providers/progress_provider.dart';
-import '../../languages/language_select/models/language.dart';
-import '../../languages/language_select/providers/language_provider.dart';
-import '../../onboarding/{screens,providers}/onboarding_provider.dart';
-import '../widgets/stats_header.dart';
-import '../widgets/learning_path.dart';
+import 'package:uas_duolingo/core/providers/shared_prefs_provider.dart';
+import 'package:uas_duolingo/core/router/app_routes.dart';
+import 'package:uas_duolingo/core/theme/app_colors.dart';
+import 'package:uas_duolingo/feature/auth/providers/auth_provider.dart';
+import 'package:uas_duolingo/feature/progress/providers/progress_provider.dart';
+import 'package:uas_duolingo/feature/languages/language_select/models/language.dart';
+import 'package:uas_duolingo/feature/languages/language_select/providers/language_provider.dart';
+import 'package:uas_duolingo/feature/onboarding/{screens,providers}/onboarding_provider.dart';
+import 'package:uas_duolingo/feature/home/widgets/stats_header.dart';
+import 'package:uas_duolingo/feature/home/widgets/learning_path.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});

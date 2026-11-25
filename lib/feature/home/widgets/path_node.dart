@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/theme/app_colors.dart';
-import '../models/learning_node.dart';
+import 'package:uas_duolingo/core/theme/app_colors.dart';
+import 'package:uas_duolingo/feature/home/models/learning_node.dart';
 
 class PathNode extends StatefulWidget {
   const PathNode({super.key, required this.node, required this.onTap});

@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../core/database/app_database.dart';
-import '../../../core/providers/shared_prefs_provider.dart';
-import '../data/auth_repository.dart';
+import 'package:uas_duolingo/core/database/app_database.dart';
+import 'package:uas_duolingo/core/providers/shared_prefs_provider.dart';
+import 'package:uas_duolingo/feature/auth/data/auth_repository.dart';
 
 // Menyediakan data untuk proses login dan register.
 final authRepositoryProvider = Provider<AuthRepository>((ref) {
