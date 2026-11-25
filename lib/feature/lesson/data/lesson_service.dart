@@ -3,7 +3,7 @@ import 'dart:math';
 
 import 'package:http/http.dart' as http;
 
-import 'lesson_catalog.dart'
+import 'lesson_catalog.dart';
 
 class TranslationService {
   TranslationService({http.Client? client}) : _client = client ?? http.Client();
