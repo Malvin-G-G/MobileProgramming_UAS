@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../auth/providers/auth_provider.dart';
 import '../../../core/router/app_routes.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../languages/language_select/providers/language_provider.dart';
@@ -27,9 +28,13 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
 
     final onboardingDone = ref.read(onboardingDoneProvider);
     final language = ref.read(selectedLanguageProvider);
+    final user = await ref.read(authProvider.future);
+    if (!mounted) return;
 
     if (!onboardingDone) {
       context.go(AppRoutes.onboarding);
+    } else if (user == null) {
+      context.go(AppRoutes.login);
     } else if (language == null) {
       context.go(AppRoutes.language);
     } else {
