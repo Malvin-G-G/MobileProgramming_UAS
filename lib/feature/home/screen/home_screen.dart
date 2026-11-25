@@ -1,93 +1,59 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
-import '../../../core/providers/shared_prefs_provider.dart';
-import '../../../core/router/app_routes.dart';
 import '../../../core/theme/app_colors.dart';
-import '../../auth/providers/auth_provider.dart';
 import '../../progress/providers/progress_provider.dart';
 import '../../languages/language_select/models/language.dart';
 import '../../languages/language_select/providers/language_provider.dart';
-import '../../onboarding/{screens,providers}/onboarding_provider.dart';
 import '../widgets/stats_header.dart';
 import '../widgets/learning_path.dart';
+import 'extra_screens.dart';
 
-class HomeScreen extends ConsumerWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
-
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends ConsumerState<HomeScreen> {
+  int _tab = 0;
+  @override
+  Widget build(BuildContext context) {
     final language = languageByCode(ref.watch(selectedLanguageProvider));
     final progress = ref.watch(progressProvider).value;
+    final pages = [
+      Column(children: [
+        StatsHeader(leading: _LanguageBadge(language: language), xp: progress?.xp ?? 0, hearts: progress?.hearts ?? 0, level: progress?.level ?? 1),
+        const Divider(height: 1, color: AppColors.border),
+        const Expanded(child: LearningPath()),
+      ]),
+      const VocabularyScreen(),
+      const StatisticsScreen(),
+      const ProfileScreen(),
+    ];
     return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            StatsHeader(
-              leading: _LanguageMenu(language: language),
-              xp: progress?.xp ?? 0,
-              hearts: progress?.hearts ?? 0,
-              level: progress?.level ?? 1,
-            ),
-            const Divider(height: 1, color: AppColors.border),
-            const Expanded(child: LearningPath()),
-          ],
-        ),
+      body: SafeArea(child: IndexedStack(index: _tab, children: pages)),
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: _tab,
+        onDestinationSelected: (index) => setState(() => _tab = index),
+        destinations: const [
+          NavigationDestination(icon: Icon(Icons.home_outlined), selectedIcon: Icon(Icons.home), label: 'Belajar'),
+          NavigationDestination(icon: Icon(Icons.menu_book_outlined), selectedIcon: Icon(Icons.menu_book), label: 'Kamus'),
+          NavigationDestination(icon: Icon(Icons.bar_chart_outlined), selectedIcon: Icon(Icons.bar_chart), label: 'Statistik'),
+          NavigationDestination(icon: Icon(Icons.person_outline), selectedIcon: Icon(Icons.person), label: 'Profil'),
+        ],
       ),
     );
   }
 }
 
-class _LanguageMenu extends ConsumerWidget {
-  const _LanguageMenu({required this.language});
-
+class _LanguageBadge extends StatelessWidget {
+  const _LanguageBadge({required this.language});
   final Language? language;
-
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final user = ref.watch(authProvider).value;
-
-    return PopupMenuButton<String>(
-      tooltip: 'Menu',
-      onSelected: (value) async {
-        if (value == 'change') {
-          context.go(AppRoutes.language);
-        } else if (value == 'logout') {
-          await ref.read(authProvider.notifier).logout();
-          if (context.mounted) context.go(AppRoutes.login);
-        } else if (value == 'reset') {
-          await ref.read(sharedPrefsProvider).clear();
-          ref.invalidate(selectedLanguageProvider);
-          ref.invalidate(onboardingDoneProvider);
-          ref.invalidate(authProvider);
-          if (context.mounted) context.go(AppRoutes.splash);
-        }
-      },
-      itemBuilder: (context) => [
-        if (user != null)
-          PopupMenuItem<String>(
-            enabled: false,
-            child: Text('Signed in as ${user.username}'),
-          ),
-        const PopupMenuItem<String>(
-          value: 'change',
-          child: Text('Change language'),
-        ),
-        const PopupMenuItem<String>(value: 'logout', child: Text('Log out')),
-        // again, delete later, not now
-        const PopupMenuItem<String>(
-          value: 'reset',
-          child: Text('Reset data (debug)'),
-        ),
-      ],
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(language?.flag ?? '🌍', style: const TextStyle(fontSize: 28)),
-          const Icon(Icons.arrow_drop_down, color: AppColors.textSecondary),
-        ],
-      ),
-    );
-  }
+  Widget build(BuildContext context) => Row(mainAxisSize: MainAxisSize.min, children: [
+    Text(language?.flag ?? '🌍', style: const TextStyle(fontSize: 28)),
+    const SizedBox(width: 5),
+    Text(language?.name ?? 'Bahasa', style: const TextStyle(fontWeight: FontWeight.bold)),
+  ]);
 }
