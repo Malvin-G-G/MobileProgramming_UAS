@@ -6,7 +6,6 @@ import '../../feature/onboarding/{screens,providers}/onboarding_screen.dart';
 import '../../feature/auth/screens/login_screen.dart';
 import '../../feature/auth/screens/register_screen.dart';
 import '../../feature/splash/screens/splash_screen.dart';
-import '../../feature/lesson/screens/lesson_screen.dart';
 import 'app_routes.dart';
 
 final GoRouter appRouter = GoRouter(
@@ -35,11 +34,6 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: AppRoutes.home,
       builder: (context, state) => const HomeScreen(),
-    ),
-    GoRoute(
-      path: AppRoutes.lesson,
-      builder: (context, state) =>
-          LessonScreen(lessonId: state.pathParameters['id']!),
     ),
   ],
 );
