@@ -1,42 +1,16 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
-import '../../../core/router/app_routes.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/prime.button.dart';
-import '../../progress/data/progress_repository.dart';
-import '../../progress/providers/progress_provider.dart';
 import '../models/learning_node.dart';
 
-void _showMessage(BuildContext context, String text) {
-  ScaffoldMessenger.of(context)
-    ..hideCurrentSnackBar()
-    ..showSnackBar(SnackBar(content: Text(text)));
-}
-
-Future<void> showNodeSheet(
-  BuildContext context,
-  WidgetRef ref,
-  LessonNode node,
-) async {
+void showNodeSheet(BuildContext context, LessonNode node) {
   if (node.status == NodeStatus.locked) {
-    _showMessage(context, 'Finish the previous lesson first.');
-    return;
-  }
-
-  // muat ulang dulu supaya HP yang sudah regenerasi ikut terhitung
-  final progress = await ref.read(progressProvider.notifier).reload();
-  if (!context.mounted) return;
-
-  if (progress.hearts <= 0) {
-    final remaining =
-        kHeartRegenInterval -
-        DateTime.now().difference(progress.heartsUpdatedAt);
-    final minutes = max(1, remaining.inMinutes + 1);
-    _showMessage(context, 'No hearts left. Next heart in about $minutes min.');
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(
+        const SnackBar(content: Text('Finish the previous lesson first.')),
+      );
     return;
   }
 
@@ -70,9 +44,13 @@ Future<void> showNodeSheet(
             label: done ? 'PRACTICE' : 'START',
             onPressed: () {
               Navigator.of(sheetContext).pop();
-              if (context.mounted) {
-                context.push(AppRoutes.lessonPath(node.id));
-              }
+              ScaffoldMessenger.of(context)
+                ..hideCurrentSnackBar()
+                ..showSnackBar(
+                  const SnackBar(
+                    content: Text('Lessons are not built yet (next feature).'),
+                  ),
+                );
             },
           ),
         ],

@@ -6,6 +6,4 @@ class AppRoutes {
   static const String register = '/register';
   static const String language = '/language';
   static const String home = '/home';
-  static const String lesson = '/lesson/:id';
-  static String lessonPath(String id) => '/lesson/$id';
 }
