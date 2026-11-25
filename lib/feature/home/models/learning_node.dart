@@ -1,4 +1,4 @@
-import '../../lesson/data/lesson_catalog.dart';
+import 'package:uas_duolingo/feature/lesson/data/lesson_catalog.dart';
 
 enum NodeStatus { locked, active, done }
 

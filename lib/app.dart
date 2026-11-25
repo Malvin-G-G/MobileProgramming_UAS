@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'core/router/app_router.dart';
-import 'core/theme/app_theme.dart';
+import 'package:uas_duolingo/core/router/app_router.dart';
+import 'package:uas_duolingo/core/theme/app_theme.dart';
 
 class MultilingoApp extends StatelessWidget {
   const MultilingoApp({super.key});

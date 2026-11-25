@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'app_colors.dart';
+import 'package:uas_duolingo/core/theme/app_colors.dart';
 
 class AppTheme {
   AppTheme._();

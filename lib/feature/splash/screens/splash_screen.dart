@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../auth/providers/auth_provider.dart';
-import '../../../core/router/app_routes.dart';
-import '../../../core/theme/app_colors.dart';
-import '../../languages/language_select/providers/language_provider.dart';
-import '../../onboarding/{screens,providers}/onboarding_provider.dart';
+import 'package:uas_duolingo/feature/auth/providers/auth_provider.dart';
+import 'package:uas_duolingo/core/router/app_routes.dart';
+import 'package:uas_duolingo/core/theme/app_colors.dart';
+import 'package:uas_duolingo/feature/languages/language_select/providers/language_provider.dart';
+import 'package:uas_duolingo/feature/onboarding/{screens,providers}/onboarding_provider.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});

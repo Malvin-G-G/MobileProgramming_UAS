@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../theme/app_colors.dart';
+import 'package:uas_duolingo/core/theme/app_colors.dart';
 
 class PrimeButton extends StatefulWidget {
   const PrimeButton({
