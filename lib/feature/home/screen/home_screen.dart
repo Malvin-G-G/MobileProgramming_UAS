@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/providers/shared_prefs_provider.dart';
 import '../../../core/router/app_routes.dart';
 import '../../../core/theme/app_colors.dart';
-import '../../../core/widgets/prime.button.dart';
+import '../../auth/providers/auth_provider.dart';
 import '../../languages/language_select/models/language.dart';
 import '../../languages/language_select/providers/language_provider.dart';
 import '../../onboarding/{screens,providers}/onboarding_provider.dart';
@@ -44,22 +44,40 @@ class _LanguageMenu extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(authProvider).value;
+
     return PopupMenuButton<String>(
       tooltip: 'Menu',
       onSelected: (value) async {
         if (value == 'change') {
           context.go(AppRoutes.language);
+        } else if (value == 'logout') {
+          await ref.read(authProvider.notifier).logout();
+          if (context.mounted) context.go(AppRoutes.login);
         } else if (value == 'reset') {
           await ref.read(sharedPrefsProvider).clear();
           ref.invalidate(selectedLanguageProvider);
           ref.invalidate(onboardingDoneProvider);
+          ref.invalidate(authProvider);
           if (context.mounted) context.go(AppRoutes.splash);
         }
       },
-      itemBuilder: (context) => const [
-        PopupMenuItem<String>(value: 'change', child: Text('Change language')),
+      itemBuilder: (context) => [
+        if (user != null)
+          PopupMenuItem<String>(
+            enabled: false,
+            child: Text('Signed in as ${user.username}'),
+          ),
+        const PopupMenuItem<String>(
+          value: 'change',
+          child: Text('Change language'),
+        ),
+        const PopupMenuItem<String>(value: 'logout', child: Text('Log out')),
         // again, delete later, not now
-        PopupMenuItem<String>(value: 'reset', child: Text('Reset data (debug)')),
+        const PopupMenuItem<String>(
+          value: 'reset',
+          child: Text('Reset data (debug)'),
+        ),
       ],
       child: Row(
         mainAxisSize: MainAxisSize.min,
