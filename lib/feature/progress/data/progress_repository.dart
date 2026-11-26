@@ -1,10 +1,13 @@
 import 'dart:math';
 
 import 'package:uas_duolingo/core/database/app_database.dart';
+import 'package:uas_duolingo/feature/progress/domain/streak_logic.dart';
 
 const int kMaxHearts = 5;
 const Duration kHeartRegenInterval = Duration(minutes: 5);
 const int kXpPerLevel = 100;
+const int kDefaultDailyGoal = 30;
+const List<int> kDailyGoalOptions = [10, 20, 30, 50];
 
 class ProgressState {
   const ProgressState({
@@ -12,6 +15,11 @@ class ProgressState {
     required this.hearts,
     required this.heartsUpdatedAt,
     required this.completed,
+    this.streak = 0,
+    this.longestStreak = 0,
+    this.lastActiveDate,
+    this.dailyGoal = kDefaultDailyGoal,
+    this.xpByDay = const {},
   });
 
   factory ProgressState.initial() => ProgressState(
@@ -24,22 +32,52 @@ class ProgressState {
   final int xp;
   final int hearts;
   final DateTime heartsUpdatedAt;
-  final Set<String> completed; // id lesson yang sudah selesai
+  final Set<String> completed; 
 
-  // Level user dari total XP,tiap 100 xp naik 1 level
+  final int streak; 
+  final int longestStreak;
+  final String? lastActiveDate; 
+  final int dailyGoal; 
+  final Map<String, int> xpByDay; 
+
   int get level => xp ~/ kXpPerLevel + 1;
+
+  int get currentStreak => displayStreak(
+        stored: streak,
+        lastActive: lastActiveDate,
+        now: DateTime.now(),
+      );
+
+  bool get studiedToday => lastActiveDate == dayKey(DateTime.now());
+
+  int get todayXp => xpByDay[dayKey(DateTime.now())] ?? 0;
+
+  bool get goalReached => todayXp >= dailyGoal;
+
+  double get goalProgress =>
+      dailyGoal <= 0 ? 0 : (todayXp / dailyGoal).clamp(0.0, 1.0).toDouble();
 
   ProgressState copyWith({
     int? xp,
     int? hearts,
     DateTime? heartsUpdatedAt,
     Set<String>? completed,
+    int? streak,
+    int? longestStreak,
+    String? lastActiveDate,
+    int? dailyGoal,
+    Map<String, int>? xpByDay,
   }) {
     return ProgressState(
       xp: xp ?? this.xp,
       hearts: hearts ?? this.hearts,
       heartsUpdatedAt: heartsUpdatedAt ?? this.heartsUpdatedAt,
       completed: completed ?? this.completed,
+      streak: streak ?? this.streak,
+      longestStreak: longestStreak ?? this.longestStreak,
+      lastActiveDate: lastActiveDate ?? this.lastActiveDate,
+      dailyGoal: dailyGoal ?? this.dailyGoal,
+      xpByDay: xpByDay ?? this.xpByDay,
     );
   }
 }
@@ -54,7 +92,15 @@ class ProgressRepository {
     final db = await _appDb.database;
     final rows = await db.query(
       'users',
-      columns: ['xp', 'hearts', 'hearts_updated_at'],
+      columns: [
+        'xp',
+        'hearts',
+        'hearts_updated_at',
+        'streak',
+        'longest_streak',
+        'last_active_date',
+        'daily_goal',
+      ],
       where: 'id = ?',
       whereArgs: [userId],
       limit: 1,
@@ -95,15 +141,41 @@ class ProgressRepository {
       whereArgs: [userId, languageCode],
     );
 
+    // XP per hari untuk 7 hari terakhir (daily goal & statistik mingguan)
+    final now = DateTime.now();
+    final since = dayKey(DateTime(now.year, now.month, now.day - 6));
+    final dailyRows = await db.query(
+      'daily_xp',
+      columns: ['day', 'xp'],
+      where: 'user_id = ? AND day >= ?',
+      whereArgs: [userId, since],
+    );
+
     return ProgressState(
       xp: row['xp'] as int,
       hearts: hearts,
       heartsUpdatedAt: updatedAt,
       completed: {for (final r in done) r['lesson_id'] as String},
+      streak: row['streak'] as int,
+      longestStreak: row['longest_streak'] as int,
+      lastActiveDate: row['last_active_date'] as String?,
+      dailyGoal: row['daily_goal'] as int,
+      xpByDay: {for (final r in dailyRows) r['day'] as String: r['xp'] as int},
     );
   }
 
-  // Kurangi 1 HP (dipanggil ketika jawaban salah)
+  // Ubah target XP harian
+  Future<void> setDailyGoal(int userId, int goal) async {
+    final db = await _appDb.database;
+    await db.update(
+      'users',
+      {'daily_goal': goal},
+      where: 'id = ?',
+      whereArgs: [userId],
+    );
+  }
+
+  // Kurangi 1 HP (ketika jawaban salah)
   Future<({int hearts, DateTime updatedAt})> loseHeart(int userId) async {
     final db = await _appDb.database;
     final rows = await db.query(
@@ -173,10 +245,51 @@ class ProgressRepository {
         );
       }
 
-      await txn.rawUpdate(
-        'UPDATE users SET xp = xp + ? WHERE id = ?',
-        [xpGained, userId],
+      // Perbarui streak harian
+      final userRow = await txn.query(
+        'users',
+        columns: ['streak', 'longest_streak', 'last_active_date'],
+        where: 'id = ?',
+        whereArgs: [userId],
+        limit: 1,
       );
+      final today = DateTime.now();
+      final streak = nextStreak(
+        current: userRow.first['streak'] as int,
+        longest: userRow.first['longest_streak'] as int,
+        lastActive: userRow.first['last_active_date'] as String?,
+        now: today,
+      );
+
+      await txn.rawUpdate(
+        'UPDATE users SET xp = xp + ?, streak = ?, longest_streak = ?, '
+        'last_active_date = ? WHERE id = ?',
+        [xpGained, streak.streak, streak.longest, dayKey(today), userId],
+      );
+
+      // Catat XP hari ini untuk daily goal
+      final todayKey = dayKey(today);
+      final dailyRow = await txn.query(
+        'daily_xp',
+        columns: ['xp'],
+        where: 'user_id = ? AND day = ?',
+        whereArgs: [userId, todayKey],
+        limit: 1,
+      );
+      if (dailyRow.isEmpty) {
+        await txn.insert('daily_xp', {
+          'user_id': userId,
+          'day': todayKey,
+          'xp': xpGained,
+        });
+      } else {
+        await txn.update(
+          'daily_xp',
+          {'xp': (dailyRow.first['xp'] as int) + xpGained},
+          where: 'user_id = ? AND day = ?',
+          whereArgs: [userId, todayKey],
+        );
+      }
     });
   }
 }
