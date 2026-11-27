@@ -6,7 +6,9 @@ class AppColors {
   static const Color primaryDark = Color(0xFF4F35C9);
   static const Color accent = Color(0xFFFFC83D);
   static const Color accentDark = Color(0xFFE09A00);
-
+  // Streak 
+  static const Color streak = Color(0xFFFF9600);
+  static const Color streakInactive = Color(0xFFB8B5C9);
   // Positive and negative
   static const Color success = Color(0xFF2EC4B6);
   static const Color error = Color(0xFFFF5A5F);
