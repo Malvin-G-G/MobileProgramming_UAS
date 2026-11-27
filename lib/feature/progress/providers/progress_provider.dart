@@ -9,8 +9,8 @@ final progressRepositoryProvider = Provider<ProgressRepository>((ref) {
   return ProgressRepository(ref.watch(appDatabaseProvider));
 });
 
-/// XP, HP, dan lesson yang selesai milik user yang sedang login,
-/// untuk bahasa yang sedang dipelajari.
+// XP, HP, dan lesson yang selesai milik user yang sedang login,
+// untuk bahasa yang sedang dipelajari.
 class ProgressNotifier extends AsyncNotifier<ProgressState> {
   @override
   Future<ProgressState> build() async {
@@ -20,7 +20,7 @@ class ProgressNotifier extends AsyncNotifier<ProgressState> {
     return ref.read(progressRepositoryProvider).load(user.id, language ?? '');
   }
 
-  /// Muat ulang dari database (sekalian menghitung regenerasi HP).
+  // Muat ulang dari database (sekalian menghitung regenerasi HP).
   Future<ProgressState> reload() async {
     final user = ref.read(authProvider).value;
     if (user == null) return ProgressState.initial();
@@ -32,7 +32,7 @@ class ProgressNotifier extends AsyncNotifier<ProgressState> {
     return fresh;
   }
 
-  /// Kurangi 1 HP. Mengembalikan sisa HP.
+  // Kurangi 1 HP. Mengembalikan sisa HP.
   Future<int> loseHeart() async {
     final user = ref.read(authProvider).value;
     if (user == null) return 0;
@@ -48,8 +48,17 @@ class ProgressNotifier extends AsyncNotifier<ProgressState> {
     );
     return result.hearts;
   }
+  
+  // Ubah target XP harian.
+  Future<void> setDailyGoal(int goal) async {
+    final user = ref.read(authProvider).value;
+    if (user == null) return;
+    await ref.read(progressRepositoryProvider).setDailyGoal(user.id, goal);
+    final current = state.value ?? ProgressState.initial();
+    state = AsyncData(current.copyWith(dailyGoal: goal));
+  }
 
-  /// Tandai lesson selesai, tambah XP, lalu muat ulang state.
+  // Tandai lesson selesai, tambah XP, lalu muat ulang state.
   Future<void> completeLesson({
     required String lessonId,
     required int xpGained,
