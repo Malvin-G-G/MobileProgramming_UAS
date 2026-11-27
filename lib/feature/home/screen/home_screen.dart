@@ -23,7 +23,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final progress = ref.watch(progressProvider).value;
     final pages = [
       Column(children: [
-        StatsHeader(leading: _LanguageBadge(language: language), xp: progress?.xp ?? 0, hearts: progress?.hearts ?? 0, level: progress?.level ?? 1),
+        StatsHeader(
+          leading: _LanguageBadge(language: language),
+          xp: progress?.xp ?? 0,
+          hearts: progress?.hearts ?? 0,
+          level: progress?.level ?? 1,
+          streak: progress?.currentStreak ?? 0,
+          streakActive: progress?.studiedToday ?? false,
+        ),
         const Divider(height: 1, color: AppColors.border),
         const Expanded(child: LearningPath()),
       ]),

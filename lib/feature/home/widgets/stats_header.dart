@@ -9,25 +9,35 @@ class StatsHeader extends StatelessWidget {
     required this.xp,
     required this.hearts,
     this.level = 1,
+    this.streak = 0,
+    this.streakActive = false,
   });
 
   final Widget leading;
   final int xp;
   final int hearts;
   final int level;
+  final int streak; 
+  final bool streakActive;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: Row(
-        children: [
+           children: [
           leading,
           const Spacer(),
+          _Stat(
+            icon: Icons.local_fire_department_rounded,
+            color: streakActive ? AppColors.streak : AppColors.streakInactive,
+            value: streak,
+          ),
+          const SizedBox(width: 12),
           _Stat(icon: Icons.bolt, color: AppColors.accentDark, value: xp),
+          const SizedBox(width: 8),
           _LevelChip(level: level),
-          const SizedBox(width: 16),
-          const SizedBox(width: 16),
+          const SizedBox(width: 12),
           _Stat(icon: Icons.favorite, color: AppColors.error, value: hearts),
         ],
       ),
